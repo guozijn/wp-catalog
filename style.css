@@ -243,9 +243,10 @@ nav.site-nav > ul > li > a:focus {
   border-radius: 0;
   width: 100vw;
   margin-inline: calc(50% - 50vw);
-  height: clamp(220px, 40vw, 420px);
+  height: auto;
+  aspect-ratio: 16 / 5;
   box-shadow: none;
-  background: transparent;
+  background: var(--color-surface-muted);
 }
 
 .hero-placeholder {
@@ -273,7 +274,6 @@ nav.site-nav > ul > li > a:focus {
   z-index: 1;
 }
 
-.hero-slide__image,
 .hero-slide__link {
   width: 100%;
   height: 100%;
@@ -281,7 +281,8 @@ nav.site-nav > ul > li > a:focus {
 }
 
 .hero-slide__image {
-  object-fit: cover;
+  object-fit: contain;
+  background: #f8fafc;
 }
 
 .hero-slide__link {
