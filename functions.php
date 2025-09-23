@@ -165,12 +165,6 @@ function catalog_register_meta() {
     $string_meta( 'catalog_slide', 'catalog_slide_theme_class' );
 
     $string_meta( 'catalog_product', 'catalog_product_subtitle' );
-    register_post_meta( 'catalog_product', 'catalog_product_specs', [
-        'type'              => 'string',
-        'single'            => true,
-        'sanitize_callback' => 'sanitize_textarea_field',
-        'show_in_rest'      => true,
-    ] );
 
     $string_meta( 'catalog_cta', 'catalog_cta_button_label' );
     $string_meta( 'catalog_cta', 'catalog_cta_button_link', [ 'sanitize_callback' => 'esc_url_raw' ] );
@@ -367,15 +361,10 @@ function catalog_render_slide_meta_box( $post ) {
 function catalog_render_product_meta_box( $post ) {
     wp_nonce_field( 'catalog_product_meta', 'catalog_product_meta_nonce' );
     $subtitle = get_post_meta( $post->ID, 'catalog_product_subtitle', true );
-    $specs    = get_post_meta( $post->ID, 'catalog_product_specs', true );
     ?>
     <p>
         <label for="catalog_product_subtitle"><strong><?php esc_html_e( 'Subtitle', 'catalog' ); ?></strong></label><br />
         <input type="text" name="catalog_product_subtitle" id="catalog_product_subtitle" value="<?php echo esc_attr( $subtitle ); ?>" class="widefat" />
-    </p>
-    <p>
-        <label for="catalog_product_specs"><strong><?php esc_html_e( 'Key Features (one per line)', 'catalog' ); ?></strong></label><br />
-        <textarea name="catalog_product_specs" id="catalog_product_specs" rows="6" class="widefat" placeholder="<?php esc_attr_e( 'Voltage range, Rated current, Highlights…', 'catalog' ); ?>"><?php echo esc_textarea( $specs ); ?></textarea>
     </p>
     <?php
 }
@@ -442,10 +431,8 @@ function catalog_save_meta_boxes( $post_id ) {
         }
 
         $subtitle = isset( $_POST['catalog_product_subtitle'] ) ? sanitize_text_field( wp_unslash( $_POST['catalog_product_subtitle'] ) ) : '';
-        $specs    = isset( $_POST['catalog_product_specs'] ) ? sanitize_textarea_field( wp_unslash( $_POST['catalog_product_specs'] ) ) : '';
 
         update_post_meta( $post_id, 'catalog_product_subtitle', $subtitle );
-        update_post_meta( $post_id, 'catalog_product_specs', $specs );
     }
 
     if ( 'catalog_cta' === $post_type ) {
@@ -516,11 +503,6 @@ function catalog_get_first_line( WP_Post $post ) {
     }
 
     return $first_line;
-}
-
-function catalog_get_specs_list( $spec_string ) {
-    $lines = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', (string) $spec_string ) ) );
-    return $lines;
 }
 
 function catalog_get_product_image_html( $post_id, $size = 'medium_large' ) {

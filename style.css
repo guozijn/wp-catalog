@@ -737,15 +737,12 @@ nav.site-nav > ul > li > a:focus {
   color: var(--color-secondary);
 }
 
-.product-single__content p {
-  color: var(--color-muted);
-  line-height: 1.75;
-}
 
-.product-single__specs ul {
-  list-style: disc;
-  padding-left: 1.5rem;
-  color: var(--color-muted);
+.product-single__content p,
+.product-single__content li,
+.product-single__content blockquote {
+  color: #1f2937;
+  line-height: 1.75;
 }
 
 .certificates {

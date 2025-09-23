@@ -28,22 +28,6 @@ get_header();
 
             <div class="product-single__content">
                 <?php the_content(); ?>
-
-                <?php
-                $specs = catalog_get_specs_list( get_post_meta( get_the_ID(), 'catalog_product_specs', true ) );
-                if ( $specs ) :
-                    ?>
-                    <section class="product-single__specs">
-                        <h2><?php esc_html_e( 'Key Features', 'catalog' ); ?></h2>
-                        <ul>
-                            <?php foreach ( $specs as $spec ) : ?>
-                                <li><?php echo esc_html( $spec ); ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </section>
-                    <?php
-                endif;
-                ?>
             </div>
         </article>
     </div>

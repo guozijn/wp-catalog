@@ -77,8 +77,6 @@ get_header();
                     while ( $product_query->have_posts() ) :
                         $product_query->the_post();
                         $product_id = get_the_ID();
-                        $subtitle   = get_post_meta( $product_id, 'catalog_product_subtitle', true );
-                        $specs      = catalog_get_specs_list( get_post_meta( $product_id, 'catalog_product_specs', true ) );
                         ?>
                         <article class="product-card">
                             <a class="product-card__inner" href="<?php the_permalink(); ?>">
@@ -94,14 +92,6 @@ get_header();
                                 </figure>
                                 <div class="product-card__content">
                                     <h3><?php the_title(); ?></h3>
-                                    <?php if ( $subtitle ) : ?><p class="product-card__subtitle"><?php echo esc_html( $subtitle ); ?></p><?php endif; ?>
-                                    <?php if ( $specs ) : ?>
-                                        <ul>
-                                            <?php foreach ( $specs as $spec ) : ?>
-                                                <li><?php echo esc_html( $spec ); ?></li>
-                                            <?php endforeach; ?>
-                                        </ul>
-                                    <?php endif; ?>
                                 </div>
                             </a>
                         </article>

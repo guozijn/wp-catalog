@@ -179,6 +179,7 @@
       carousel.addEventListener('mouseleave', startLoop);
       carousel.addEventListener('touchstart', stopLoop, { passive: true });
       carousel.addEventListener('touchend', startLoop, { passive: true });
+      carousel.addEventListener('touchcancel', startLoop, { passive: true });
       carousel.addEventListener('focusin', stopLoop);
       carousel.addEventListener('focusout', resumeLoop);
 
