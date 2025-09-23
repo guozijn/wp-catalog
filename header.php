@@ -54,7 +54,6 @@
         <?php else : ?>
             <nav class="site-nav" aria-label="<?php esc_attr_e( 'Primary Navigation', 'catalog' ); ?>">
                 <ul>
-                    <li><a href="<?php echo esc_url( home_url( '/#advantages' ) ); ?>"><?php esc_html_e( 'Advantages', 'catalog' ); ?></a></li>
                     <li><a href="<?php echo esc_url( home_url( '/products/' ) ); ?>"><?php esc_html_e( 'Products', 'catalog' ); ?></a></li>
                     <li><a href="<?php echo esc_url( home_url( '/certifications/' ) ); ?>"><?php esc_html_e( 'Certifications', 'catalog' ); ?></a></li>
                     <li><a href="<?php echo esc_url( home_url( '/news/' ) ); ?>"><?php esc_html_e( 'News', 'catalog' ); ?></a></li>

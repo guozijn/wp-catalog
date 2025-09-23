@@ -578,3 +578,14 @@ function catalog_get_slide_image_html( $post_id ) {
 
     return '';
 }
+
+add_filter( 'wp_robots', 'catalog_customize_wp_robots' );
+function catalog_customize_wp_robots( array $robots ) {
+    unset( $robots['noindex'], $robots['nofollow'] );
+
+    $robots['index']             = true;
+    $robots['follow']            = true;
+    $robots['max-image-preview'] = 'large';
+
+    return $robots;
+}
