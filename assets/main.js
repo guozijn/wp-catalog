@@ -88,39 +88,101 @@
     const next = carousel.querySelector('.carousel-next');
     if (!track) return;
 
-    const getStep = () => track.clientWidth / 2;
+    const getGapValue = () => {
+      const styles = window.getComputedStyle(track);
+      const gapValue = parseFloat(styles.columnGap || styles.gap || '0');
+      return Number.isFinite(gapValue) ? gapValue : 0;
+    };
+
+    let hasLoop = false;
+    let stepSize = 0;
+    let loopWidth = track.scrollWidth;
+    let startLoop = () => {};
+    let stopLoop = () => {};
+
+    const updateMetrics = () => {
+      const firstSlide = track.querySelector('.certificate-slide');
+      const firstWidth = firstSlide ? firstSlide.getBoundingClientRect().width : 0;
+      stepSize = firstWidth ? firstWidth + getGapValue() : track.clientWidth / 2;
+      loopWidth = hasLoop ? track.scrollWidth / 2 : track.scrollWidth;
+    };
+
+    updateMetrics();
+    window.addEventListener('resize', updateMetrics, { passive: true });
 
     const scrollBy = (delta) => {
       track.scrollBy({ left: delta, behavior: 'smooth' });
     };
 
-    prev?.addEventListener('click', () => scrollBy(-getStep()));
-    next?.addEventListener('click', () => scrollBy(getStep()));
+    const handleNav = (direction) => {
+      updateMetrics();
+      if (hasLoop) {
+        stopLoop();
+      }
+      scrollBy(direction * stepSize || direction * (track.clientWidth / 2));
+      if (hasLoop) {
+        window.setTimeout(startLoop, 350);
+      }
+    };
 
-    if (carousel.hasAttribute('data-autoplay')) {
-      let autoplayId = null;
-      const startAutoplay = () => {
-        stopAutoplay();
-        autoplayId = window.setInterval(() => {
-          const maxScroll = track.scrollWidth - track.clientWidth;
-          if (track.scrollLeft + track.clientWidth >= maxScroll - 2) {
-            track.scrollTo({ left: 0, behavior: 'smooth' });
-          } else {
-            scrollBy(getStep());
-          }
-        }, 4000);
-      };
+    prev?.addEventListener('click', () => handleNav(-1));
+    next?.addEventListener('click', () => handleNav(1));
 
-      const stopAutoplay = () => {
-        if (autoplayId) {
-          window.clearInterval(autoplayId);
-          autoplayId = null;
+    const slides = Array.from(track.children);
+
+    if (carousel.hasAttribute('data-autoplay') && slides.length > 1) {
+      const speedAttr = parseFloat(carousel.getAttribute('data-speed') || '');
+      const pixelsPerFrame = Number.isFinite(speedAttr) && speedAttr > 0 ? speedAttr : 0.6;
+
+      slides.forEach((slide) => {
+        const clone = slide.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        track.appendChild(clone);
+      });
+
+      hasLoop = true;
+      updateMetrics();
+
+      let frameId = null;
+      const loopStep = () => {
+        track.scrollLeft += pixelsPerFrame;
+        if (loopWidth > 0 && track.scrollLeft >= loopWidth) {
+          track.scrollLeft -= loopWidth;
         }
+        frameId = window.requestAnimationFrame(loopStep);
       };
 
-      carousel.addEventListener('mouseenter', stopAutoplay);
-      carousel.addEventListener('mouseleave', startAutoplay);
-      startAutoplay();
+      startLoop = () => {
+        if (frameId !== null) {
+          return;
+        }
+        frameId = window.requestAnimationFrame(loopStep);
+      };
+
+      stopLoop = () => {
+        if (frameId === null) {
+          return;
+        }
+        window.cancelAnimationFrame(frameId);
+        frameId = null;
+      };
+
+      const resumeLoop = () => {
+        if (!hasLoop) {
+          return;
+        }
+        stopLoop();
+        startLoop();
+      };
+
+      carousel.addEventListener('mouseenter', stopLoop);
+      carousel.addEventListener('mouseleave', startLoop);
+      carousel.addEventListener('touchstart', stopLoop, { passive: true });
+      carousel.addEventListener('touchend', startLoop, { passive: true });
+      carousel.addEventListener('focusin', stopLoop);
+      carousel.addEventListener('focusout', resumeLoop);
+
+      startLoop();
     }
   });
 })();

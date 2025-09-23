@@ -771,14 +771,14 @@ nav.site-nav > ul > li > a:focus {
 }
 
 .certificate-track {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(240px, 1fr);
+  display: flex;
   gap: 2rem;
   padding: 0 3.5rem;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
   scrollbar-width: none;
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .certificate-track::-webkit-scrollbar {
@@ -786,7 +786,7 @@ nav.site-nav > ul > li > a:focus {
 }
 
 .certificate-slide {
-  scroll-snap-align: center;
+  flex: 0 0 clamp(210px, 24vw, 260px);
   border-radius: 20px;
   padding: 0;
   display: grid;
@@ -808,8 +808,10 @@ nav.site-nav > ul > li > a:focus {
 .certificate-slide__media {
   margin: 0;
   width: 100%;
-  max-width: 280px;
-  height: 280px;
+  max-width: 260px;
+  aspect-ratio: 210 / 297;
+  height: auto;
+  min-height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
