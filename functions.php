@@ -307,7 +307,7 @@ function catalog_output_meta_keywords() {
         return;
     }
 
-    printf( "\n<meta name=\"keywords\" content=\"%s\" />\n", esc_attr( $keywords ) );
+    printf( "\n<meta name=\"description\" content=\"%s\" />\n", esc_attr( $keywords ) );
 }
 
 add_action( 'add_meta_boxes', 'catalog_add_meta_boxes' );
