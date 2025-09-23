@@ -17,15 +17,6 @@ get_header();
                 <h1 class="certificate-single__title"><?php the_title(); ?></h1>
             </header>
 
-            <?php
-            $certificate_image = catalog_get_product_image_html( get_the_ID(), 'large' );
-            if ( $certificate_image ) :
-                ?>
-                <figure class="certificate-single__media">
-                    <?php echo $certificate_image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                </figure>
-            <?php endif; ?>
-
             <div class="certificate-single__content">
                 <?php the_content(); ?>
             </div>
